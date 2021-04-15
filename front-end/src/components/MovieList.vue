@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
     <div class="movies">
-      <div class="movie" v-for="movie in movies" :key="movie.id">
+      <div class="movie" v-for="(movie, index) in movies" :key="movie.id">
         <div class="image">
           <img :src="require(`@/assets/Movies/${movie.image}`)" />
         </div>
@@ -12,7 +12,21 @@
         </div>
         <div class="name">
           <h3>{{ movie.name }}</h3>
-          <button @click="addToTheatre(movie)">Add to Review List</button>
+        </div>
+        <div class="review">
+          <div class="reviewName">
+            <input
+              type="text"
+              v-model="reviewName[index]"
+              placeholder="Type your name here..."
+            />
+          </div>
+          <input
+            type="text"
+            v-model="userReview[index]"
+            placeholder="Type your review here..."
+          />
+          <button @click="addReview(index)">Publish Your Review</button>
         </div>
       </div>
     </div>
@@ -20,17 +34,34 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   name: "MovieList",
+  data() {
+    return {
+      userReview: [],
+      reviewName: [],
+    };
+  },
   props: {
     movies: Array,
   },
   methods: {
     addToTheatre(movie) {
-      if (this.$root.$data.theatre.includes(movie)) {
-        return;
-      }
       this.$root.$data.theatre.push(movie);
+    },
+    async addReview(index) {
+      try {
+        await axios.post("/api/Review", {
+          reviewName: this.reviewName[index],
+          userReview: this.userReview[index],
+          movieId: this.movies[index].id,
+        });
+        this.reviewName.splice(index, 1, "");
+        this.userReview.splice(index, 1, "");
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 };
@@ -41,7 +72,6 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: "Lucida Console", "Courier New", monospace;
 }
 
 .movies {
@@ -59,7 +89,6 @@ export default {
 
 .movie img {
   border: 2px solid #333;
-  border-radius: 5px;
   height: 250px;
   width: 200px;
   object-fit: cover;
@@ -106,5 +135,29 @@ button {
 
 .auto {
   margin-left: auto;
+}
+.review .reviewName input {
+  width: 100%;
+  height: 30px;
+  margin-bottom: 2px;
+  border-radius: 5px;
+}
+.review {
+  justify-content: center;
+}
+.review input {
+  width: 100%;
+  height: 70px;
+  border-radius: 5px;
+  margin-top: 5px;
+}
+.review button {
+  height: 40px;
+  background: #8b0000;
+  color: rgb(255, 255, 255);
+  border-radius: 5px;
+  font-family: "Lucida Console", "Courier New", monospace;
+  border: none;
+  align-items: center;
 }
 </style>

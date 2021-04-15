@@ -16,6 +16,7 @@
 </template>
 
 <script>
+import axios from "axios";
 import MovieList from "../components/MovieList.vue";
 export default {
   name: "Home",
@@ -25,17 +26,21 @@ export default {
   data() {
     return {
       searchText: "",
+      movies: [],
     };
   },
-  computed: {
-    movies() {
-      return this.$root.$data.movies
-        ? this.$root.$data.movies.filter(
-            (movie) =>
-              movie.name.toLowerCase().search(this.searchText.toLowerCase()) >=
-              0
-          )
-        : [];
+  created() {
+    this.getMovies();
+  },
+  methods: {
+    async getMovies() {
+      try {
+        let response = await axios.get("/api/movies");
+        this.movies = response.data;
+        return true;
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 };

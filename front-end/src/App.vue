@@ -8,20 +8,15 @@
       </div>
       <div id="side">
         <router-link to="/">
-          <div class="menu-item browse">
+          <div class="menu-item home">
             <img src="./assets/llamas.jpeg" />
             <p>Home</p>
           </div>
         </router-link>
-        <router-link to="/theatre">
+        <router-link to="/reviews">
           <div class="menu-item">
             <img src="./assets/tv.png" />
-            <p>
-              {{
-                this.$root.$data.theatre ? this.$root.$data.theatre.length : 0
-              }}
-              Movie(s)
-            </p>
+            <p>Reviews</p>
           </div>
         </router-link>
       </div>
@@ -29,7 +24,7 @@
     <router-view />
     <footer>
       <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
-      <a href="https://github.com/michbarn10/CP3">GitHub</a>
+      <a href="https://github.com/michbarn10/CP4">GitHub</a>
     </footer>
   </div>
 </template>
@@ -79,7 +74,7 @@ body {
   margin: 0px;
 }
 
-.browse {
+.home {
   margin-right: 10px;
 }
 </style>
